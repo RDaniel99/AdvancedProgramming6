@@ -47,6 +47,7 @@ public class ConfigurationPanel extends JPanel {
 
         regPolyBtn.setBackground(Color.orange);
         ovalBtn.setBackground(Color.gray);
+        eraseBtn.setBackground(Color.gray);
 
         add(formLabel);
         add(regPolyBtn);
@@ -56,6 +57,10 @@ public class ConfigurationPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isEraserLastPressed = true;
+
+                eraseBtn.setBackground(Color.orange);
+                regPolyBtn.setBackground(Color.gray);
+                ovalBtn.setBackground(Color.gray);
             }
         });
 
@@ -65,6 +70,7 @@ public class ConfigurationPanel extends JPanel {
                 pressedButton = 0;
                 isEraserLastPressed = false;
 
+                eraseBtn.setBackground(Color.gray);
                 regPolyBtn.setBackground(Color.orange);
                 ovalBtn.setBackground(Color.gray);
             }
@@ -77,7 +83,7 @@ public class ConfigurationPanel extends JPanel {
 
                 isEraserLastPressed = false;
 
-                System.out.println(pressedButton);
+                eraseBtn.setBackground(Color.gray);
                 regPolyBtn.setBackground(Color.gray);
                 ovalBtn.setBackground(Color.orange);
             }

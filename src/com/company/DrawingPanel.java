@@ -54,7 +54,7 @@ public class DrawingPanel extends JPanel {
             if(poly.contains(x, y)) {
                 graphics.setColor(Color.white);
                 if(poly.isOval()) {
-                    graphics.fillOval(x, y, 20, 15);
+                    graphics.fillOval(poly.getCenterx(), poly.getCentery(), 20, 15);
                 }
                 else {
                     graphics.fill(poly);
@@ -67,7 +67,7 @@ public class DrawingPanel extends JPanel {
     }
 
     private void drawShape(int x, int y, int sides) {
-        RegularPolygon poly = new RegularPolygon();
+        RegularPolygon poly = new RegularPolygon(x, y);
         Random random = new Random();
         float r = random.nextFloat();
         float g = random.nextFloat();

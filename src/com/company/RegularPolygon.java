@@ -4,6 +4,7 @@ import java.awt.*;
 
 public class RegularPolygon extends Polygon {
     public boolean isOval;
+    public int centerx, centery;
 
     public boolean isOval() {
         return isOval;
@@ -13,7 +14,21 @@ public class RegularPolygon extends Polygon {
         isOval = oval;
     }
 
-    public RegularPolygon() {
+    public int getCenterx() {
+        return centerx;
+    }
+
+    public int getCentery() {
+        return centery;
+    }
+
+    public RegularPolygon(int x, int y) {
+        this.addPoint(x + 15, y);
+        this.addPoint(x, y + 20);
+        this.addPoint(x - 15, y);
+        this.addPoint(x, y - 20);
+        centerx = x;
+        centery = y;
         isOval = true;
     }
 
