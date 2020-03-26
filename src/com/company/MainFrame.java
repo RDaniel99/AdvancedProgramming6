@@ -10,7 +10,7 @@ public class MainFrame extends JFrame {
     ControlPanel controlPanel;
 
     public MainFrame() {
-        configPanel = new ConfigurationPanel();
+        configPanel = new ConfigurationPanel(this);
         drawingPanel = new DrawingPanel(this, configPanel);
         controlPanel = new ControlPanel(drawingPanel);
 

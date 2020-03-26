@@ -40,6 +40,11 @@ public class DrawingPanel extends JPanel {
         });
     }
     private void drawShape(int x, int y, int sides) {
+        if(configurationPanel.getPressedButton() == 1) {
+            graphics.fillOval(x, y, 20, 15);
+            return ;
+        }
+
         if(sides <= 2) {
             JOptionPane.showMessageDialog(frame, "You need at least 3 sides");
             return ;
