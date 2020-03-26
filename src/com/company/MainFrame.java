@@ -12,7 +12,7 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         configPanel = new ConfigurationPanel();
         drawingPanel = new DrawingPanel(this, configPanel);
-        controlPanel = new ControlPanel();
+        controlPanel = new ControlPanel(drawingPanel);
 
         setLayout(new BorderLayout());
 

@@ -2,11 +2,15 @@ package com.company;
 
 import sun.security.krb5.Config;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
 
 public class DrawingPanel extends JPanel {
     final MainFrame frame;
@@ -22,8 +26,7 @@ public class DrawingPanel extends JPanel {
     private void createOffscreenImage() {
         image = new BufferedImage(W, H, BufferedImage.TYPE_INT_ARGB);
         graphics = image.createGraphics();
-        graphics.setColor(Color.WHITE); //fill the image with white
-        graphics.fillRect(0, 0, W, H);
+        resetPaint(false);
     }
 
     private void init() {
@@ -42,8 +45,12 @@ public class DrawingPanel extends JPanel {
             return ;
         }
 
-        int radius = 20; //generate a random number
-        Color color =  Color.red; //create a transparent random Color.
+        Random random = new Random();
+        float r = random.nextFloat();
+        float g = random.nextFloat();
+        float b = random.nextFloat();
+        int radius = random.nextInt(15) + 20; //generate a random number
+        Color color =  new Color(r, g, b); //create a transparent random Color.
         graphics.setColor(color);
         graphics.fill(new RegularPolygon(x, y, radius, sides));
     }
@@ -53,5 +60,50 @@ public class DrawingPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         g.drawImage(image, 0, 0, this);
+    }
+
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    public void resetPaint(boolean showDialog) {
+        graphics.setColor(Color.WHITE); //fill the image with white
+        graphics.fillRect(0, 0, W, H);
+
+        if(showDialog)
+            JOptionPane.showMessageDialog(frame, "Paint zone cleared");
+
+        repaint();
+    }
+
+    public void savePaint() throws IOException {
+        final JFileChooser fc = new JFileChooser();
+        int returnValue = fc.showOpenDialog(frame);
+
+        if(returnValue == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            System.out.println("Opening: " + file.getName());
+            ImageIO.write(image, "jpg", file);
+        }
+        else {
+            System.out.println("Cancelled");
+        }
+    }
+
+    public void loadPaint() throws IOException {
+        final JFileChooser fc = new JFileChooser();
+        int returnValue = fc.showOpenDialog(frame);
+
+        if(returnValue == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            System.out.println("Opening: " + file.getName());
+            image = ImageIO.read(file);
+            graphics = image.createGraphics();
+
+            repaint();
+        }
+        else {
+            System.out.println("Cancelled");
+        }
     }
 }
