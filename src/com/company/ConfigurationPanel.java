@@ -9,12 +9,22 @@ public class ConfigurationPanel extends JPanel {
     JLabel sidesLabel;
     JSpinner sidesSpinner;
     MainFrame frame;
+    JButton eraseBtn;
 
     JLabel formLabel;
     JButton regPolyBtn;
     JButton ovalBtn;
 
     int pressedButton;
+    boolean isEraserLastPressed;
+
+    public boolean isEraserLastPressed() {
+        return isEraserLastPressed;
+    }
+
+    public void setEraserLastPressed(boolean eraserLastPressed) {
+        isEraserLastPressed = eraserLastPressed;
+    }
 
     public ConfigurationPanel(MainFrame mainFrame) {
         this.frame = mainFrame;
@@ -22,8 +32,12 @@ public class ConfigurationPanel extends JPanel {
         sidesSpinner = new JSpinner();
         sidesSpinner.setValue(5);
 
+        eraseBtn = new JButton("Eraser");
+        isEraserLastPressed = false;
+
         pressedButton = 0;
 
+        add(eraseBtn);
         add(sidesLabel);
         add(sidesSpinner);
 
@@ -38,10 +52,18 @@ public class ConfigurationPanel extends JPanel {
         add(regPolyBtn);
         add(ovalBtn);
 
+        eraseBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isEraserLastPressed = true;
+            }
+        });
+
         regPolyBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 pressedButton = 0;
+                isEraserLastPressed = false;
 
                 regPolyBtn.setBackground(Color.orange);
                 ovalBtn.setBackground(Color.gray);
@@ -53,6 +75,9 @@ public class ConfigurationPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 pressedButton = 1;
 
+                isEraserLastPressed = false;
+
+                System.out.println(pressedButton);
                 regPolyBtn.setBackground(Color.gray);
                 ovalBtn.setBackground(Color.orange);
             }
