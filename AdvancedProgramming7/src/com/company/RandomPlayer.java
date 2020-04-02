@@ -1,23 +1,32 @@
 package com.company;
 
+import java.util.Random;
 import java.util.Scanner;
 
-public class ManualPlayer extends Player {
+public class RandomPlayer extends Player {
     private Thread t;
     public Integer move;
+    public int tokens;
 
-    public ManualPlayer(String pName) {
+    public RandomPlayer(String pName) {
         super(pName);
         t = null;
         move = 0;
-        setType(1);
+        tokens = 0;
+        setType(2);
+    }
+
+    public void setTokens(int tokens) {
+        this.tokens = tokens;
     }
 
     public void chooseToken() {
         synchronized (Main.lock) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Alege un index: ");
-            move = scanner.nextInt();
+            Random random = new Random();
+            move = random.nextInt(tokens);
+
+            System.out.println("Player " + getName() + " had chosen " + move);
+
             Main.lock.notify();
         }
     }

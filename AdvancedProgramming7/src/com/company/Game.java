@@ -18,6 +18,8 @@ public class Game {
 
     public void nextPlayer() {
         whoMoves = (whoMoves + 1) % players.size();
+
+        System.out.println("Next player: " + players.get(whoMoves).getName());
     }
 
     public Player getPlayer(int index) {
@@ -42,6 +44,23 @@ public class Game {
         }
 
         return true;
+    }
+
+    public void printOptions() {
+        board.printAvailableTokens();
+    }
+
+    public boolean isGameOver() {
+        int maximum = 0;
+
+        for(Player p: players) {
+            int score = p.getScore();
+            if(maximum < score) {
+                maximum = score;
+            }
+        }
+
+        return board.getLength() <= maximum;
     }
 
     static public int getScore(List<Token> tokens, int blankTokens) {
@@ -72,5 +91,16 @@ public class Game {
         }
 
         return maxLength;
+    }
+
+    public int getTotalTokens() {
+        return board.getTotalTokens();
+    }
+
+    public void move(int mutare) {
+        int value = board.extractToken(mutare);
+
+        getPlayer(getCurrPlayer()).addToken(new Token(value));
+        nextPlayer();
     }
 }

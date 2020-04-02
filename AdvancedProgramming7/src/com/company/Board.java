@@ -5,8 +5,10 @@ import java.util.*;
 public class Board {
     private List<Token> tokens;
     private int blankTokens;
+    private int length;
 
     public Board(int n, int m, int k) {
+        length = k;
         Integer[] array = new Integer[m];
         for(int i = 1; i <= m; i++) {
             array[i - 1] = i;
@@ -35,6 +37,10 @@ public class Board {
                 flag = true;
             }
         } while(flag);
+    }
+
+    public int getLength() {
+        return length;
     }
 
     public List<Token> getTokens() {
@@ -71,7 +77,7 @@ public class Board {
         }
 
         for(int i = 0; i < blankTokens; i++) {
-            System.out.println("Index " + i + ": B");
+            System.out.println("Index " + (i + tokens.size()) + ": B");
         }
     }
 

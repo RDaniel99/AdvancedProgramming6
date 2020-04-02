@@ -8,11 +8,21 @@ public abstract class Player implements Runnable {
     private List<Token> tokens;
     private int blankTokens;
     private String name;
+    private int type;
 
     public Player(String pName) {
         tokens = new ArrayList<Token>();
         name = pName;
         blankTokens = 0;
+        type = 0;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
     }
 
     public String getName() {

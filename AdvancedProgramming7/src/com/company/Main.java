@@ -3,9 +3,12 @@ package com.company;
 import java.io.IOException;
 import java.util.Scanner;
 
+import static java.lang.System.exit;
 import static java.lang.Thread.sleep;
 
 public class Main {
+    public static final Object lock = new Object();
+
     private static void clearScreen() {
         for(int i = 0; i <= 15; i++) {
             System.out.println();
@@ -41,16 +44,24 @@ public class Main {
 	        System.out.print("Player " + i + ": ");
 	        String playerName = scanner.next();
 
-	        System.out.println("Type (1 - mutual, 2 - random, 3 - smart): ");
+	        System.out.println("Type (1 - manual, 2 - random, 3 - smart): ");
 	        int playerType = scanner.nextInt();
-
-            if (playerType == 1) {
-                ManualPlayer player = new ManualPlayer(playerName);
-                game.addPlayer(player);
-            } else {
-                System.out.println("Wrong type! Reintroduce the info about this player");
-                i--;
+            Player player;
+	        switch(playerType) {
+                case 1:
+                    player = new ManualPlayer(playerName);
+                    game.addPlayer(player);
+                    break;
+                case 2:
+                    player = new RandomPlayer(playerName);
+                    game.addPlayer(player);
+                    break;
+                default:
+                    System.out.println("Wrong type! Reintroduce the info about this player");
+                    i--;
+                    break;
             }
+
         }
 
 	    clearScreen();
@@ -64,5 +75,48 @@ public class Main {
 	    System.out.println("GO!");
 
 	    sleep(1000);
+
+	    System.out.println(game.getPlayer(0).getName() + " starts!");
+        while(!game.isGameOver()) {
+            int mutare = -1;
+
+            game.printOptions();
+            Player player = game.getPlayer(game.getCurrPlayer());
+            if(player.getType() == 1) {
+                ManualPlayer currPlayer = ((ManualPlayer) player);
+                currPlayer.start();
+                synchronized (lock) {
+                    lock.wait();
+                }
+
+                mutare = currPlayer.getMove();
+            }
+            else if(player.getType() == 2) {
+                RandomPlayer currPlayer = ((RandomPlayer) player);
+                currPlayer.setTokens(game.getTotalTokens());
+                currPlayer.start();
+                synchronized (lock) {
+                    lock.wait();
+                }
+
+                mutare = currPlayer.getMove();
+            }
+            clearScreen();
+            if(game.canMove(mutare)) {
+                game.move(mutare);
+            }
+            else {
+                System.out.println("Wrong move. Re-move");
+            }
+        }
+
+        for(int i = 0; i < numberOfPlayers; i++) {
+            Player player = game.getPlayer(i);
+
+            if(player.getScore() >= length) {
+                System.out.println(player.getName() + " wins! His tokens: ");
+                System.out.println(player);
+            }
+        }
     }
 }
