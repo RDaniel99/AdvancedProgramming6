@@ -56,6 +56,10 @@ public class Main {
                     player = new RandomPlayer(playerName);
                     game.addPlayer(player);
                     break;
+                case 3:
+                    player = new SmartPlayer(playerName);
+                    game.addPlayer(player);
+                    break;
                 default:
                     System.out.println("Wrong type! Reintroduce the info about this player");
                     i--;
@@ -101,21 +105,57 @@ public class Main {
 
                 mutare = currPlayer.getMove();
             }
-            clearScreen();
+            else {
+                SmartPlayer currPlayer = ((SmartPlayer) player);
+                currPlayer.setTokens(game.getTokens());
+                currPlayer.setBlankOnBoard(game.getTotalTokens() - game.getTokens().size());
+                currPlayer.start();
+                synchronized (lock) {
+                    lock.wait();
+                }
+
+                mutare = currPlayer.getMove();
+            }
+
             if(game.canMove(mutare)) {
                 game.move(mutare);
             }
             else {
                 System.out.println("Wrong move. Re-move");
             }
+
+
+            sleep(2000);
+            clearScreen();
         }
 
+        boolean flag = false;
         for(int i = 0; i < numberOfPlayers; i++) {
             Player player = game.getPlayer(i);
 
             if(player.getScore() >= length) {
                 System.out.println(player.getName() + " wins! His tokens: ");
                 System.out.println(player);
+                flag = true;
+                break;
+            }
+        }
+
+        if(!flag) {
+            System.out.println("Draw. Scores: ");
+
+            for(int i = 0; i < numberOfPlayers; i++) {
+                Player player = game.getPlayer(i);
+
+                System.out.println("Player " + player.getName() + ": " + player.getScore());
+            }
+        }
+
+        boolean debug = true;
+        if(debug) {
+            for(int i = 0; i < numberOfPlayers; i++) {
+                System.out.println(game.getPlayer(i));
+                System.out.println("Score: " + game.getPlayer(i).getScore());
             }
         }
     }

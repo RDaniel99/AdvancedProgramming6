@@ -50,6 +50,10 @@ public abstract class Player implements Runnable {
         }
     }
 
+    public void removeToken(Token token) {
+        tokens.remove(token);
+    }
+
     @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();

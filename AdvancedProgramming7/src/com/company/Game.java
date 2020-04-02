@@ -19,7 +19,9 @@ public class Game {
     public void nextPlayer() {
         whoMoves = (whoMoves + 1) % players.size();
 
-        System.out.println("Next player: " + players.get(whoMoves).getName());
+        if(!isGameOver()) {
+            System.out.println("Next player: " + players.get(whoMoves).getName());
+        }
     }
 
     public Player getPlayer(int index) {
@@ -66,6 +68,10 @@ public class Game {
     static public int getScore(List<Token> tokens, int blankTokens) {
         Collections.sort(tokens);
 
+        if(tokens.size() <= 1) {
+            return tokens.size() + blankTokens;
+        }
+
         int maxLength = 0;
         for(int i = 0; i < tokens.size(); i++) {
             for(int j = i + 1; j < tokens.size(); j++) {
@@ -102,5 +108,9 @@ public class Game {
 
         getPlayer(getCurrPlayer()).addToken(new Token(value));
         nextPlayer();
+    }
+
+    public List<Token> getTokens() {
+        return board.getTokens();
     }
 }
