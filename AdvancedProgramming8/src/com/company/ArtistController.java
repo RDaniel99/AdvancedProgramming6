@@ -17,12 +17,12 @@ public class ArtistController {
     public boolean findByName(String name) throws SQLException, ClassNotFoundException {
         Connection con = Database.getInstance().getConnection();
         Statement stmt = con.createStatement();
-        String sql = "select name, country from artists where name = " + '\'' + name + '\'' + ';';
+        String sql = "select nume, country from artists where nume = " + '\'' + name + '\'';
         ResultSet result = stmt.executeQuery(sql);
 
         if(result.next()) {
             mName = name;
-            mCountry = result.getString(1);
+            mCountry = result.getString(2);
             return true;
         }
 

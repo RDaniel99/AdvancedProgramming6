@@ -21,13 +21,13 @@ public class AlbumController {
     public boolean findByArtistId(int artistId) throws SQLException, ClassNotFoundException {
         Connection con = Database.getInstance().getConnection();
         Statement stmt = con.createStatement();
-        String sql = "select name, release_year from albums where artist_id = " + artistId + ';';
+        String sql = "select nume, release_year from albums where artist_id = " + artistId;
         ResultSet result = stmt.executeQuery(sql);
 
         if(result.next()) {
-            mName = result.getString(0);
+            mName = result.getString(1);
             mArtistId = artistId;
-            mReleaseYear = parseInt(result.getString(1));
+            mReleaseYear = parseInt(result.getString(2));
             return true;
         }
 
