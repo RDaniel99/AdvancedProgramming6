@@ -12,6 +12,7 @@ public class Main {
         ArtistController Carl = new ArtistController(null, null);
         if(Carl.findByName("Carl")) {
             System.out.println(Carl.getmName() + " " + Carl.getmCountry());
+            System.out.println("Ranking: " + Carl.getRankingInChart(Carl.getmName()));
         }
         else {
             System.out.println("Artist not found");
