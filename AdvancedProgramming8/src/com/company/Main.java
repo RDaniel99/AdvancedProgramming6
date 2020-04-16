@@ -15,7 +15,7 @@ public class Main {
             System.out.println("Ranking: " + Carl.getRankingInChart(Carl.getmName()));
         }
         else {
-            System.out.println("Artist not found");
+            System.out.println("Artist not found.");
         }
 
         AlbumController AlbumBob = new AlbumController(null, 0, 0);
