@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class GameClient {
     public GameClient() {
@@ -18,11 +19,18 @@ public class GameClient {
                 BufferedReader in = new BufferedReader (
                         new InputStreamReader(socket.getInputStream())) ) {
             // Send a request to the server
-            String request = "World";
-            out.println(request);
-            // Wait the response from the server ("Hello World!")
-            String response = in.readLine ();
-            System.out.println(response);
+            while(true) {
+                String request;
+                Scanner scanner = new Scanner(System.in);
+                request = scanner.next();
+
+                out.println(request);
+                System.out.println("Citit: " + request);
+                // Wait the response from the server ("Hello World!")
+                String response = in.readLine();
+                System.out.println(response);
+                if(response.equals("exit")) break;
+            }
         } catch (UnknownHostException e) {
             System.err.println("No server listening... " + e);
         } catch (IOException e) {

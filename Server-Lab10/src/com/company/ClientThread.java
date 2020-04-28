@@ -12,15 +12,27 @@ class ClientThread extends Thread {
     public void run () {
         try {
             // Get the request from the input stream: client → server
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
-            String request = in.readLine();
+            while(true) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(socket.getInputStream()));
+                String request = in.readLine();
+                String answer;
+                if (request.equals("stop")) {
+                    System.out.println("Thread stopped");
+                    answer = "exit";
+                } else {
+                    System.out.println("Server received the request " + request);
+                    answer = "Executing command " + request + "!";
+                }
+                // Send the response to the oputput stream: server → client
+                PrintWriter out = new PrintWriter(socket.getOutputStream());
+                out.println(answer);
+                out.flush();
 
-            // Send the response to the oputput stream: server → client
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
-            String raspuns = "Hello " + request + "!";
-            out.println(raspuns);
-            out.flush();
+                if(answer.equals("exit")) {
+                    break;
+                }
+            }
         } catch (IOException e) {
             System.err.println("Communication error... " + e);
         } finally {
