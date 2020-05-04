@@ -25,7 +25,6 @@ public class GameClient {
                 request = scanner.next();
 
                 out.println(request);
-                System.out.println("Citit: " + request);
                 // Wait the response from the server ("Hello World!")
                 String response = in.readLine();
                 System.out.println(response);
