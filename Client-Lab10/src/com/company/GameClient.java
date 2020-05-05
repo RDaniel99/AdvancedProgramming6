@@ -31,7 +31,7 @@ public class GameClient {
                     response = in.readLine();
                 }
 
-                System.out.println(response);
+                System.out.println(response.replace("ttt", "\n"));
                 if(response.equals("exit")) {
                     socket.close();
                     break;

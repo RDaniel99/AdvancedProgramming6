@@ -30,7 +30,7 @@ public class Board {
                     buffer.append(' ');
                 }
                 else {
-                    buffer.append('\n');
+                    buffer.append(" ttt");
                 }
             }
         }

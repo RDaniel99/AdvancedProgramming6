@@ -28,10 +28,9 @@ public class Game {
 
         if(player2 == null) {
             player2 = player;
+            player.setGameId(gameId);
             return true;
         }
-
-        player.setGameId(gameId);
 
         return false;
     }

@@ -62,11 +62,11 @@ public class GameServer {
         for(Game game: games) {
             buffer.append("Game ").append(game.getGameId());
             buffer.append(" | Total players: ").append(game.totalPlayers());
-            buffer.append('\n');
+            buffer.append(" ttt");
         }
 
         if(buffer.toString().isEmpty()) {
-            buffer.append("No games created\n");
+            buffer.append("No games created.ttt");
         }
 
         return buffer.toString();
@@ -74,7 +74,7 @@ public class GameServer {
 
     public String addGame(Player player) {
         if(player.getGameId() > 0) {
-            return "You already are in a game.\n";
+            return "You already are in a game.ttt";
         }
 
         Game game = new Game(player);
@@ -83,6 +83,38 @@ public class GameServer {
         game.setGameId(totalGames);
         games.add(game);
 
-        return "Game with id = " + totalGames + " is created and you are in. Waiting for other players\n";
+        return "Game with id = " + totalGames + " is created and you are in. Waiting for other players...ttt";
+    }
+
+    public String joinGame(Player player, int gameId) {
+        if(player.getGameId() > -1) {
+            return "You are already in a game.ttt";
+        }
+
+        for(Game game: games) {
+            if(game.getGameId() == gameId) {
+                if(game.join(player)) {
+                    return "You joined the game with id = " + gameId + "ttt";
+                }
+
+                break;
+            }
+        }
+
+        return "You couldn't join the game with id = " + gameId + ".ttt";
+    }
+
+    public String displayGame(int gameId) {
+        if(gameId == -1) {
+            return "You aren't in a game.ttt";
+        }
+
+        for(Game game: games) {
+            if(game.getGameId() == gameId) {
+                return game.displayBoard() + "ttt";
+            }
+        }
+
+        return "Something went wrong. Try later.ttt";
     }
 }
