@@ -28,7 +28,10 @@ public class GameClient {
                 // Wait the response from the server ("Hello World!")
                 String response = in.readLine();
                 System.out.println(response);
-                if(response.equals("exit")) break;
+                if(response.equals("exit")) {
+                    socket.close();
+                    break;
+                }
             }
         } catch (UnknownHostException e) {
             System.err.println("No server listening... " + e);

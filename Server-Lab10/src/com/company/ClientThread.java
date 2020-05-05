@@ -8,7 +8,14 @@ import java.net.Socket;
 
 class ClientThread extends Thread {
     private Socket socket = null ;
-    public ClientThread (Socket socket) { this.socket = socket ; }
+    private GameServer server = null;
+    private Player parent = null;
+    public ClientThread (GameServer server, Socket socket, Player parent) {
+        this.socket = socket ;
+        this.server = server;
+        this.parent = parent;
+    }
+
     public void run () {
         try {
             // Get the request from the input stream: client → server
@@ -16,14 +23,9 @@ class ClientThread extends Thread {
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(socket.getInputStream()));
                 String request = in.readLine();
-                String answer;
-                if (request.equals("stop")) {
-                    System.out.println("Thread stopped");
-                    answer = "exit";
-                } else {
-                    System.out.println("Server received the request " + request);
-                    answer = "Executing command " + request + "!";
-                }
+
+                String answer  = decodeReq(request);
+
                 // Send the response to the oputput stream: server → client
                 PrintWriter out = new PrintWriter(socket.getOutputStream());
                 out.println(answer);
@@ -40,5 +42,20 @@ class ClientThread extends Thread {
                 socket.close(); // or use try-with-resources
             } catch (IOException e) { System.err.println (e); }
         }
+    }
+
+    public String decodeReq(String request) {
+        if(request.equals("stop")) {
+            ExecuteStopCommand();
+            return "exit";
+        }
+
+        System.out.println("Server received the request " + request);
+        return "Executing command " + request + "!";
+    }
+
+    public void ExecuteStopCommand() {
+        server.removePlayer(parent);
+        System.out.println("Thread stopped");
     }
 }

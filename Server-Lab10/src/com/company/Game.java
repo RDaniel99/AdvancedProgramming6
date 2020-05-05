@@ -70,4 +70,8 @@ public class Game {
 
         return false;
     }
+
+    public String displayBoard() {
+        return board.toString();
+    }
 }
