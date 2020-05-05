@@ -27,6 +27,10 @@ public class GameClient {
                 out.println(request);
                 // Wait the response from the server ("Hello World!")
                 String response = in.readLine();
+                while(response.isEmpty()) {
+                    response = in.readLine();
+                }
+
                 System.out.println(response);
                 if(response.equals("exit")) {
                     socket.close();

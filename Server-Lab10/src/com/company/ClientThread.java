@@ -45,17 +45,34 @@ class ClientThread extends Thread {
     }
 
     public String decodeReq(String request) {
+        System.out.println("Server received the request " + request);
+
         if(request.equals("stop")) {
-            ExecuteStopCommand();
-            return "exit";
+            return ExecuteStopCommand();
         }
 
-        System.out.println("Server received the request " + request);
-        return "Executing command " + request + "!";
+        if(request.equals("show")) {
+            return ExecuteShowCommand();
+        }
+
+        if(request.equals("create")) {
+            return ExecuteCreateCommand();
+        }
+
+        return "Unknown command " + request + "!";
     }
 
-    public void ExecuteStopCommand() {
+    public String ExecuteStopCommand() {
         server.removePlayer(parent);
         System.out.println("Thread stopped");
+        return "exit";
+    }
+
+    public String ExecuteShowCommand() {
+        return server.getGames();
+    }
+
+    public String ExecuteCreateCommand() {
+        return server.addGame(parent);
     }
 }

@@ -18,11 +18,20 @@ public class Game {
         return gameId;
     }
 
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
+
     public boolean join(Player player) {
+        if(gameId < 0)
+            return false;
+
         if(player2 == null) {
             player2 = player;
             return true;
         }
+
+        player.setGameId(gameId);
 
         return false;
     }
@@ -73,5 +82,17 @@ public class Game {
 
     public String displayBoard() {
         return board.toString();
+    }
+
+    public int totalInGame() {
+        if(player2 == null) {
+            if(player1 == null) {
+                return 0;
+            }
+
+            return 1;
+        }
+
+        return 2;
     }
 }
