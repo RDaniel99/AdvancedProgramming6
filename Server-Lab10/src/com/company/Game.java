@@ -5,11 +5,12 @@ public class Game {
     private int gameId;
     private Player player1;
     private Player player2;
-
+    private int whoTurns;
 
     public Game(Player player) {
         player1 = player;
         player2 = null;
+        whoTurns = 1;
 
         board = new Board();
     }
@@ -33,6 +34,14 @@ public class Game {
         }
 
         return false;
+    }
+
+    public int getWhoTurns() {
+        return whoTurns;
+    }
+
+    public void nextPlayer() {
+        whoTurns = 3 - whoTurns;
     }
 
     public int totalPlayers() {
@@ -71,9 +80,11 @@ public class Game {
     public boolean makeMove(Player player, int row, int column) {
         int ord = isPlayerInGame(player);
 
-        if(ord > 0) {
-            if(ord == 1) return board.makeMove(row, column, 'X');
-            if(ord == 2) return board.makeMove(row, column, 'O');
+        if(ord == getWhoTurns()) {
+            if (ord > 0) {
+                if (ord == 1) return board.makeMove(row, column, 'X');
+                if (ord == 2) return board.makeMove(row, column, 'O');
+            }
         }
 
         return false;
@@ -93,5 +104,23 @@ public class Game {
         }
 
         return 2;
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
+    }
+
+    public Player getOtherPlayer(Player player) {
+        if(isPlayerInGame(player) == 0) {
+            return null;
+        }
+
+        if(player == player1) return player2;
+
+        return player1;
     }
 }

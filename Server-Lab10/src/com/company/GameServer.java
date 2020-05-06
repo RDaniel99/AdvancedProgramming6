@@ -39,13 +39,16 @@ public class GameServer {
         }
     }
 
-    public void removePlayer(Player player) {
+    public void removePlayer(Player player) throws IOException {
         if(player.getGameId() > -1) {
             for(Game game: games) {
                 if (game.getGameId() == player.getGameId()) {
                     game.exit(player);
                     if(game.totalPlayers() == 0) {
                         games.remove(game);
+                    }
+                    else {
+                        game.getPlayer1().addNotification("The other player exited the game. The board was cleared.ttt");
                     }
 
                     break;
@@ -86,7 +89,7 @@ public class GameServer {
         return "Game with id = " + totalGames + " is created and you are in. Waiting for other players...ttt";
     }
 
-    public String joinGame(Player player, int gameId) {
+    public String joinGame(Player player, int gameId) throws IOException {
         if(player.getGameId() > -1) {
             return "You are already in a game.ttt";
         }
@@ -94,6 +97,7 @@ public class GameServer {
         for(Game game: games) {
             if(game.getGameId() == gameId) {
                 if(game.join(player)) {
+                    game.getOtherPlayer(player).addNotification("Someone joined your game. The game started.ttt");
                     return "You joined the game with id = " + gameId + "ttt";
                 }
 
@@ -116,5 +120,29 @@ public class GameServer {
         }
 
         return "Something went wrong. Try later.ttt";
+    }
+
+    public String makeMove(Player player, int row, int column) throws IOException {
+        if(player.getGameId() < 0) {
+            return "You can't make a move because you are not in a game.ttt";
+        }
+
+        for(Game game: games) {
+            if(game.isPlayerInGame(player) != 0) {
+                if(game.totalPlayers() < 2) {
+                    return "Not enough players to start.ttt";
+                }
+
+                if(!game.makeMove(player, row, column)) {
+                    return "Illegal move or it's not your turn.ttt";
+                }
+
+                game.nextPlayer();
+                game.getOtherPlayer(player).addNotification("The other player moved. Your turn.ttt");
+                break;
+            }
+        }
+
+        return "You moved. Waiting for other player...ttt";
     }
 }

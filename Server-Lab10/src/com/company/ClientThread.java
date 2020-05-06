@@ -13,11 +13,17 @@ class ClientThread extends Thread {
     private GameServer server = null;
     private Player parent = null;
     private int parityJoin;
+    private int parityMove;
+    private int row;
+    private int column;
+
     public ClientThread (GameServer server, Socket socket, Player parent) {
         this.socket = socket ;
         this.server = server;
         this.parent = parent;
         parityJoin = 0;
+        parityMove = 0;
+        row = column = 0;
     }
 
     public void run () {
@@ -65,8 +71,13 @@ class ClientThread extends Thread {
             if(parityJoin == 1) {
                 return ExecuteJoinCommand(parseInt(request));
             }
+
+            if(parityMove > 0) {
+                return ExecuteMoveCommand(parseInt(request));
+            }
         }
 
+        parityMove = 0;
         parityJoin = 0;
         if(request.equals("stop")) {
             return ExecuteStopCommand();
@@ -88,10 +99,14 @@ class ClientThread extends Thread {
             return ExecuteDisplayCommand();
         }
 
+        if(request.equals("move")) {
+            return ExecuteMoveCommand(-1);
+        }
+
         return "Unknown command " + request + "!";
     }
 
-    public String ExecuteStopCommand() {
+    public String ExecuteStopCommand() throws IOException {
         server.removePlayer(parent);
         System.out.println("Thread stopped");
         return "exit";
@@ -118,5 +133,32 @@ class ClientThread extends Thread {
 
     public String ExecuteDisplayCommand() {
         return server.displayGame(parent.getGameId());
+    }
+
+    public String ExecuteMoveCommand(int number) throws IOException {
+        if(parityMove == 0) {
+            parityMove = 1;
+            return "Row: ";
+        }
+
+        if(parityMove == 1) {
+            row = number;
+            parityMove = 2;
+            return "Column: ";
+        }
+
+        column = number;
+        parityMove = 0;
+
+        return server.makeMove(parent, row, column);
+    }
+
+    public void printNotifications() throws IOException {
+        PrintWriter out = new PrintWriter(socket.getOutputStream());
+
+        while(parent.haveNotifications()) {
+            out.println(parent.getNotification());
+            out.flush();
+        }
     }
 }
