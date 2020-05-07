@@ -14,6 +14,10 @@ public class Board {
             return false;
         }
 
+        if(table[row][column] != '.') {
+            return false;
+        }
+
         table[row][column] = c;
         return true;
     }
